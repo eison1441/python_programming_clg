@@ -1,4 +1,5 @@
-# genarate a list of 4 digit number in a giveen range with all there digit even and the number is a prefect square without using function
+# genarate a list of 
+# +digit number in a given range with all there digit even and the number is a prefect square without using function
 import math 
 for i in range(1000,10000):
     sqroot= int(math.sqrt(i))
