@@ -1,8 +1,14 @@
-for i in range(1,6):
-    for j in range(i):
-        print("*", end=" ")
-    print()
-for i in range(4,0,-1):
-    for j in range(i):
-        print("*", end=" ")
-    print()
+li=[]
+limit = int(input("enter the limit"))
+for i in range(limit):
+    word = input("enter the world")
+    li.append(word)
+print(li)
+length = 0
+longword =""
+for i in li:
+    if len(i) > length:
+        length = len(i)
+        longword = i
+        print(longword)
+        print(length)    
