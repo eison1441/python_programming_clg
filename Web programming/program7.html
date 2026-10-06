@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+<title>Calendar</title>
+
+<style>
+
+.selection {
+    text-align: center;
+    margin-bottom: 2em;
+    background-color: rgb(84, 88, 90);
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+#year_get,
+#month_get {
+    padding: 5px;
+    width: 75%;
+}
+
+input {
+    padding: 5px;
+    border-radius: 4px;
+    text-align: center;
+    width: 25%;
+    margin-top: 10px;
+}
+
+.tabselection {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+table {
+    padding: 5px;
+}
+
+.selrow {
+    border: none;
+}
+
+td,
+th {
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.selcol {
+    padding: 0px;
+    border: none;
+    text-align: center;
+}
+
+#calender {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#resetbtn {
+    background-color: red;
+    border: none;
+    color: white;
+}
+
+#subtn {
+    background-color: green;
+    border: none;
+    color: white;
+}
+/* Calendar Output */
+#calender {
+    border-collapse: separate;
+    border-spacing: 5px;
+    margin: 25px auto;
+    width: 90%;
+    max-width: 700px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+/* Calendar Header */
+#calender th {
+    background-color: #343a40;
+    color: white;
+    padding: 14px 8px;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+}
+
+/* Calendar Date Cells */
+#calender td {
+    background-color: #f1f3f5;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    padding: 14px 8px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+/* Hover Effect */
+#calender td:hover {
+    background-color: #0c110f;
+    color: white;
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+/* Sunday */
+#calender th:first-child {
+    background-color: #dc3545;
+}
+
+/* Sunday Date */
+#calender td:first-child {
+    color: #dc3545;
+}
+
+/* Empty cells */
+#calender td:empty {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+/* Calendar container */
+#content {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="selection">
+
+<table class="tabselection" cellspacing="10">
+
+<tbody>
+
+<tr class="selrow">
+
+<td class="selcol">
+    <input style=" width: 100%;padding: 5px;box-sizing: border-box;border: white;border-radius: 4px;" border-radius: 8px  type="text"
+        id="year_get"
+        type="number"
+        placeholder="year">
+</td>
+
+<td class="selcol">
+    <input style=" width: 100%;padding: 5px;box-sizing: border-box;border: white;border-radius: 4px;" border-radius: 8px  type="text"
+        id="month_get"
+        type="number"
+        placeholder="month">
+</td>
+
+</tr>
+
+<tr class="selrow">
+
+<td colspan="2" class="selcol">
+
+<input
+    onclick="generate()"
+    type="button"
+    id="subtn"
+    value="Generate Calendar">
+
+</td>
+
+</tr>
+
+<tr class="selrow">
+
+<td colspan="2" class="selcol">
+
+<input
+    type="reset"
+    value="Reset"
+    id="resetbtn"
+    onclick="location.reload();">
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div id="content"></div>
+
+<script>
+
+function generate() {
+
+    var init_content =
+        "<table border=1 id='calender'>" +
+        "<tr>" +
+        "<th>SUN</th>" +
+        "<th>MON</th>" +
+        "<th>TUE</th>" +
+        "<th>WED</th>" +
+        "<th>THU</th>" +
+        "<th>FRI</th>" +
+        "<th>SAT</th>" +
+        "</tr>";
+
+    var year_get =
+        document.getElementById("year_get").value;
+
+    var month_get =
+        document.getElementById("month_get").value;
+
+    month_get -= 1;
+
+    var date =
+        new Date(year_get, month_get);
+
+    var day =
+        date.getDay();
+
+    for (var i = 0; i < day; i++) {
+        init_content += "<td></td>";
+    }
+
+    while (date.getMonth() == month_get) {
+
+        init_content +=
+            "<td>" +
+            date.getDate() +
+            "</td>";
+
+        if (date.getDay() % 7 == 6) {
+            init_content += "</tr><tr>";
+        }
+
+        date.setDate(
+            date.getDate() + 1
+        );
+    }
+
+    while (
+        date.getDay() % 7 != 6 &&
+        date.getDay() % 7 != 0
+    ) {
+
+        init_content += "<td></td>";
+
+        date.setDate(
+            date.getDate() + 1
+        );
+    }
+
+    if (date.getDay() % 7 > 0) {
+        init_content += "<td></td></tr>";
+    }
+
+    init_content += "</table>";
+
+    document.getElementById("content").innerHTML =
+        init_content;
+}
+
+</script>
+
+</body>
+</html>
