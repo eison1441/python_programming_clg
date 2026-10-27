@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Yearly Calendar</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin: 10px;
+      display: inline-table;
+    }
+
+    th, td {
+      border: 1px solid #695c5c;
+      width: 32px;
+      height: 26px;
+      text-align: center;
+    }
+
+    caption {
+      font-weight: bold;
+    }
+
+    th {
+      background: #ddd;
+    }
+
+    .sunday {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h2 id="title"></h2>
+</body>
+
+<script>
+  var year = parseInt(prompt("Enter the year (e.g. 2026):"));
+
+  if (isNaN(year) || year < 1) {
+    document.write("Invalid year entered.");
+  } else {
+    document.getElementById("title").innerHTML =
+      "Calendar for " + year;
+
+    var months = ["January", "February", "March", "April", "May", "June",
+                  "July", "August", "September", "October", "November", "December"];
+
+    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    for (var m = 0; m < 12; m++) {
+      var firstDay = new Date(year, m, 1).getDay();
+      var totalDays = new Date(year, m + 1, 0).getDate();
+
+      var t = "<table><caption>" + months[m] + " " + year + "</caption><tr>";
+
+      for (var d = 0; d < 7; d++) {
+        if (d == 0)
+          t += "<th class='sunday'>" + days[d] + "</th>";
+        else
+          t += "<th>" + days[d] + "</th>";
+      }
+
+      t += "</tr><tr>";
+
+      for (var i = 0; i < firstDay; i++)
+        t += "<td></td>";
+
+      for (var date = 1; date <= totalDays; date++) {
+        if ((firstDay + date - 1) % 7 == 0)
+          t += "<td class='sunday'>" + date + "</td>";
+        else
+          t += "<td>" + date + "</td>";
+
+        if ((firstDay + date) % 7 === 0 && date !== totalDays)
+          t += "</tr><tr>";
+      }
+
+      t += "</tr></table>";
+      document.write(t);
+    }
+  }
+</script>
+</html>
