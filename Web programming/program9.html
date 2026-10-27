@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+<style>
+
+    body{
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        transition: background-color 0.4;
+    }
+
+    button{
+        padding: 10px 24px;
+        font-size: 16px;
+        margin-top: 40px;
+        cursor: pointer;
+        border-radius: 50px;
+        text-shadow: 20px;
+        border-color: gray
+        
+    }
+    
+</style>
+    <script>
+        var colors=["lightblue","lightgreen","pink","yellow","orange","lavender","lightcoral","khaki"];
+        var index=0;
+        function changeColor(){
+            document.body.style.backgroundColor=colors[index];
+            document.getElementById("colorName").innerHTML="Current color:"+colors[index];
+            index=(index+1)%colors.length;
+        }
+    </script>
+
+</head>
+
+<body>
+    <h2>Background Color Changer</h2>
+    <p id="colorName">Current color: white</p>
+    <button onclick="changeColor()">ChangeColor</button>    
+</body>
+</html>
