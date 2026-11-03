@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Exam</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            color: #5b4bb7;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+        }
+
+        #timer {
+            text-align: center;
+            font-size: 25px;
+            font-weight: bold;
+            color: #e53935;
+            background: #ffeaea;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .q {
+            background: #f7f7ff;
+            padding: 18px;
+            margin-bottom: 18px;
+            border-left: 5px solid #667eea;
+            border-radius: 8px;
+        }
+
+        .q b {
+            display: block;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .q label {
+            display: block;
+            padding: 10px;
+            margin: 6px 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .q label:hover {
+            background: #e9eaff;
+            border-color: #667eea;
+        }
+
+        input[type="radio"] {
+            accent-color: #667eea;
+            margin-right: 8px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f1f2ff;
+            line-height: 1.8;
+        }
+    </style>
+
+    <script>
+        var questions = [
+            {
+                q: "Which tag is used to create a hyperlink?",
+                o: ["<link>", "<a>", "<href>", "<url>"],
+                a: 1
+            },
+            {
+                q: "Which language runs in the web browser?",
+                o: ["Java", "C", "JavaScript", "Python"],
+                a: 2
+            },
+            {
+                q: "CSS stands for?",
+                o: ["Colorful Style Sheets", "Cascading Style Sheets",
+                    "Creative Style System", "Computer Style Sheets"],
+                a: 1
+            },
+            {
+                q: "Which function prints output in a PHP page?",
+                o: ["echo", "cout", "console", "write"],
+                a: 0
+            },
+            {
+                q: "Which symbol starts a PHP variable?",
+                o: ["#", "@", "$", "&"],
+                a: 2
+            }
+        ];
+
+        var timeLeft = 30;
+        var timerInterval;
+        var examEnded = false;
+
+        function loadExam() {
+            var html = "";
+
+            for (var i = 0; i < questions.length; i++) {
+                html += "<div class='q'><b>Q" + (i + 1) + ". " +
+                    questions[i].q.replace(/</g, "&lt;") + "</b>";
+
+                for (var j = 0; j < questions[i].o.length; j++) {
+                    html += "<label><input type='radio' name='q" + i +
+                        "' value='" + j + "'> " +
+                        questions[i].o[j].replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;") +
+                        "</label>";
+                }
+
+                html += "</div>";
+            }
+
+            document.getElementById("exam").innerHTML = html;
+
+            startTimer();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(function() {
+
+                var minutes = Math.floor(timeLeft / 60);
+                var seconds = timeLeft % 60;
+
+                document.getElementById("timer").innerHTML =
+                    "Time Left: " +
+                    (minutes < 10 ? "0" : "") + minutes + ":" +
+                    (seconds < 10 ? "0" : "") + seconds;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitExam(true);
+                }
+
+                timeLeft--;
+
+            }, 1000);
+        }
+
+        function submitExam(timeUp) {
+
+            if (examEnded) return;
+
+            examEnded = true;
+            clearInterval(timerInterval);
+
+            var score = 0;
+            var unanswered = 0;
+
+            for (var i = 0; i < questions.length; i++) {
+
+                var sel = document.querySelector(
+                    "input[name='q" + i + "']:checked"
+                );
+
+                if (sel === null) {
+                    unanswered++;
+                }
+                else if (parseInt(sel.value) === questions[i].a) {
+                    score++;
+                }
+            }
+
+            // Disable all answer options
+            var radios = document.querySelectorAll(
+                "input[type='radio']"
+            );
+
+            for (var i = 0; i < radios.length; i++) {
+                radios[i].disabled = true;
+            }
+
+            document.getElementById("submitBtn").disabled = true;
+            document.getElementById("submitBtn").innerHTML =
+                "Exam Submitted";
+
+            document.getElementById("timer").innerHTML =
+                timeUp ? "Time's Up!" : "Exam Completed";
+
+            var r = "";
+
+            if (timeUp) {
+                r += "<span style='color:red'>Time is over! Exam ended.</span><br>";
+            }
+
+            r += "Score: " + score + " / " + questions.length +
+                "<br>Unanswered: " + unanswered + "<br>";
+
+            r += (score >= 3)
+                ? "<span style='color:green'>Result: PASS</span>"
+                : "<span style='color:red'>Result: FAIL</span>";
+
+            document.getElementById("result").innerHTML = r;
+        }
+    </script>
+</head>
+
+<body onload="loadExam()">
+
+    <div class="container">
+
+        <h2>Online Examination</h2>
+        <p class="subtitle">Web Technology Assessment</p>
+
+        <div id="timer">Time Left: 02:00</div>
+
+        <div id="exam"></div>
+
+        <button id="submitBtn" onclick="submitExam(false)">
+            Submit Exam
+        </button>
+
+        <div id="result"></div>
+
+    </div>
+
+</body>
+</html>
+
+
