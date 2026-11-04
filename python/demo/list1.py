@@ -1,0 +1,6 @@
+a=[1,2,3,4,5,6,7]
+print(a[2::2])
+print(type(a))
+
+print(a[1::])
+print(a[2:7:-2])
