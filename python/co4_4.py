@@ -2,29 +2,6 @@
 # find sum of 2 time. 
 
 class Time:
-    
-    def __init__(self, hour, minute, second):
-        self.__hour = hour
-        self.__minute = minute
-        self.__second = second
-
-    def __add__(self, other):
-        s=self.__second+other.__second
-        m=self.__minute+other.__minute
-        h=self.__hour+other.__hour
-
-        if s>=60:
-            m+=1
-            s-=60
-        if m>=60:
-            h+=1
-            m-=60
-        return Time(h,m,s)
-
-    def display(self):
-        print(self.__hour,":",self.__minute,":",self.__second)
-
-class Time:
     def __init__(self, hour, minute, second):
         self.__hour = hour
         self.__minute = minute
