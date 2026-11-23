@@ -1,67 +1,42 @@
 #include<stdio.h>
-#define MAX 20
-struct Edge
-{
-	int u,v,w;
-};
-int parent[MAX];
-int find(int i)
-{
-	while(parent[i]!=i)
-	i=parent[i];
-	return i;
-}
-void union_set(int i,int j)
-{
-	int a=find(i);
-	int b=find(j);
-	parent[a]=b;
-}
 int main()
 {
-	struct Edge edges[MAX];
 	int n,e;
-	int totalcost=0;
-	printf("Enter number of vertices:");
+	int graph[10][10]={0};
+	int indegree[10]={0};
+	int queue[10];
+	int front=0, rear=-1;
+	printf("Enter Number Of vertices:");
 	scanf("%d",&n);
-	printf("Enter number of edges :");
+	printf("Enter number of edge:");
 	scanf("%d",&e);
-	printf("Enter each edge (u v weight) :\n");
-	for(int i = 0; i < e; i++)
+	printf("Enter edges(u,v):\n");
+	for(int i=0;i<e;i++)
 	{
-	    scanf("%d %d %d", &edges[i].u, &edges[i].v, &edges[i].w);
-	}
-	for(int i=0;i<e-1;i++)
-	{
-	    for(int j=0;j<e-1;j++)
-	    {
-	        if(edges[j].w>edges[j+1].w)
-	        {
-	            struct Edge temp=edges[j];
-	            edges[j]=edges[j+1];
-	            edges[j+1]=temp;
-	        }
-	    }
-	}
+		int u,v;
+		scanf("%d%d",&u,&v);
+		graph[u][v]=1;
+		indegree[v]++;
+    }
 	for(int i=0;i<n;i++)
-	parent[i]=i;
-	printf("\n Edges in the minimum spanning tree :\n");
-	int count=0;
-	for(int i=0;i<e && count<n-1;i++)
 	{
-		int u= edges[i].u;
-		int v= edges[i].v;
-		int w= edges[i].w;
-		int pu =find(u);
-		int pv =find(v);
-		if(pu!=pv)
+		if(indegree[i]==0)
+		queue[++rear]=i;
+	}
+	printf("\n Topological Order:");
+	while(front<=rear)
+	{
+		int node=queue[front++];
+		printf("%d",node);
+		for(int i=0;i<n;i++)
 		{
-			printf("%d - %d : %d\n",u,v,w);
-			totalcost +=w;
-			union_set(pu,pv);
-			count++;
+			if(graph[node][i]==1)
+			{
+				indegree[i]--;
+				if(indegree[i]==0)
+				queue[++rear]=i;
+			}
 		}
 	}
-	printf("Total cost of MST = %d\n",totalcost);
 	return 0;
 }
